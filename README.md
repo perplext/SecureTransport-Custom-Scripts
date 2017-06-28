@@ -2,7 +2,7 @@ This post pertains to anyone that is administering a SecureTransport server.  Th
 
 On the edge server
 
-#####<ST root folder>/bin/cleanstdb.php
+##### <ST root folder>/bin/cleanstdb.php
 ```php
 <?php
  $dbcnx = mysql_connect("127.0.0.1:33060", "root", "tumbleweed");
@@ -35,7 +35,7 @@ On the edge server
 
 All that this PHP script does is go through all events and delete entries that have in the past filled the database to the point of filling the partition.  Obviously for compliance and retention you need to keep some record of these events and that is not shown in this particular example, you’ll have to add your own logic or backup the raw logs frequently enough that you have that.
 
-#####<ST root folder>/bin/cleanstdb.sh
+##### <ST root folder>/bin/cleanstdb.sh
 ```bash
 #!/bin/bash
 /usr/bin/php /<ST root>/bin/cleanstdb.php > /tmp/cleanstdb.out
@@ -45,7 +45,7 @@ This just runs the php script and outputs any error messages it encounters.  I l
 
 The next problem to solve is exporting the valuable information from the event log database and putting it into a human readable, and greppable format.
 
-#####<ST root folder>/bin/exporteventlog.php
+##### <ST root folder>/bin/exporteventlog.php
 ```php
 <?php
  $dbcnx = mysql_connect("127.0.0.1:33060", "root", "tumbleweed");
@@ -74,7 +74,7 @@ The next problem to solve is exporting the valuable information from the event l
  mysql_close($dbcnx);
 ?>
 ```
-#####<ST root folder>/bin/exporteventlog.sh
+##### <ST root folder>/bin/exporteventlog.sh
 ```bash
 #!/bin/bash
 timestamp=`date +%Y%m%d_%H:%M:%S`
@@ -84,7 +84,7 @@ This shell script calls the PHP script to dump the valuable fields to a text fil
 
 The back-end server scripts are almost identically the same, the only difference is the database structure between an edge and back-end server differ a bit.  As the edge reports a lot more connection errors and attack attempts than the backend, the cleanup script isn’t required on the back-end server.
 
-#####<ST root>/bin/exportxferlogs.php
+##### <ST root>/bin/exportxferlogs.php
 ```php
 <?php
  $dbcnx = mysql_connect("127.0.0.1:33060", "root", "tumbleweed");
@@ -113,7 +113,7 @@ The back-end server scripts are almost identically the same, the only difference
  mysql_close($dbcnx);
 ?>
 ```
-#####<ST root>/bin/exportxferlogs.sh
+##### <ST root>/bin/exportxferlogs.sh
 ```bash
 #!/bin/bash
 timestamp=`date +%Y%m%d_%H:%M:%S`
