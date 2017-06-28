@@ -3,7 +3,7 @@ This post pertains to anyone that is administering a SecureTransport server.  Th
 On the edge server
 
 <ST root folder>/bin/cleanstdb.php
-
+```php
 <?php
  $dbcnx = mysql_connect("127.0.0.1:33060", "root", "tumbleweed");
  if (!$dbcnx) {
@@ -31,18 +31,22 @@ On the edge server
  }
  mysql_close($dbcnx);
 ?>
+```
+
 All that this PHP script does is go through all events and delete entries that have in the past filled the database to the point of filling the partition.  Obviously for compliance and retention you need to keep some record of these events and that is not shown in this particular example, you’ll have to add your own logic or backup the raw logs frequently enough that you have that.
 
 <ST root folder>/bin/cleanstdb.sh
-
+```bash
 #!/bin/bash
 /usr/bin/php /<ST root>/bin/cleanstdb.php > /tmp/cleanstdb.out
+```
+
 This just runs the php script and outputs any error messages it encounters.  I link this script into cron.hourly to do an hourly cleaning of the database and it seems to have a tremendous impact on keeping the partition from filling.
 
 The next problem to solve is exporting the valuable information from the event log database and putting it into a human readable, and greppable format.
 
 <ST root folder>/bin/exporteventlog.php
-
+```php
 <?php
  $dbcnx = mysql_connect("127.0.0.1:33060", "root", "tumbleweed");
  if (!$dbcnx) {
@@ -69,17 +73,19 @@ The next problem to solve is exporting the valuable information from the event l
  mysql_free_result($result);
  mysql_close($dbcnx);
 ?>
+```
 <ST root folder>/bin/exporteventlog.sh
-
+```bash
 #!/bin/bash
 timestamp=`date +%Y%m%d_%H:%M:%S`
 /usr/bin/php /<ST root>/dumpeventlog.php > /<Log Dir>/steventlog_$timestamp.log
+```
 This shell script calls the PHP script to dump the valuable fields to a text file, in my case I have this on a cron job to happen every 4 hours, as I’ve seen some attacks or warnings that have rotated the entire database within 6 hours.
 
 The back-end server scripts are almost identically the same, the only difference is the database structure between an edge and back-end server differ a bit.  As the edge reports a lot more connection errors and attack attempts than the backend, the cleanup script isn’t required on the back-end server.
 
 <ST root>/bin/exportxferlogs.php
-
+```php
 <?php
  $dbcnx = mysql_connect("127.0.0.1:33060", "root", "tumbleweed");
  if (!$dbcnx) {
@@ -106,11 +112,13 @@ The back-end server scripts are almost identically the same, the only difference
  mysql_free_result($result);
  mysql_close($dbcnx);
 ?>
+```
 <ST root>/bin/exportxferlogs.sh
-
+```bash
 #!/bin/bash
 timestamp=`date +%Y%m%d_%H:%M:%S`
 /usr/bin/php /<ST root>/bin/dumplogs.php > /<Log Dir>/stxferlog_$timestamp.log
+```
 As this only logs transfers which require logging in successfully this can be cron’d to run at a less frequent schedule than the edge server.
 
 Despite its event log search utility being pretty bad, SecureTransport is an extremely modifiable application that has proven to be fairly resilient.  In the future I might post some more hacks and scripts used to add functionality or increase its stability.
