@@ -1,4 +1,6 @@
-This post pertains to anyone that is administering a SecureTransport server.  This is a product for secure file transfers over HTTPS, SFTP, FTPS, AS2, and optionally insecured protocols such as HTTP and FTP with real-time PGP encryption/decryption.  With the never ceasing SSH brute force attacks among other garbage logs such as password has expired messages (152 times a minute) the logging can be pretty immense.  Add to that issue the fact that the search tool built into the product sucks for event log queries, we needed an alternative.  Here is how I achieved dumping the logs to a text file for grepping to expedite the incident reporting.
+# SecureTransport Custom Scripts
+
+This post/repo pertains to anyone that is administering a SecureTransport server.  This is a product for secure file transfers over HTTPS, SFTP, FTPS, AS2, and optionally insecured protocols such as HTTP and FTP with real-time PGP encryption/decryption.  With the never ceasing SSH brute force attacks among other garbage logs such as password has expired messages (152 times a minute) the logging can be pretty immense.  Add to that issue the fact that the search tool built into the product sucks for event log queries, we needed an alternative.  Here is how I achieved dumping the logs to a text file for grepping to expedite the incident reporting.
 
 On the edge server
 
